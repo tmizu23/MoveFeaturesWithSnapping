@@ -1,0 +1,31 @@
+; the next section is mandatory
+[general]
+name=MoveFeaturesWithSnapping
+qgisMinimumVersion=2.18
+description=MoveFeaturesWithSnapping
+category=Vector
+version=version 0.1
+author=Takayuki Mizutani
+email=
+; end of mandatory metadata
+
+; start of optional metadata
+changelog=
+
+; tags are in comma separated value format, spaces are allowed
+tags=vector
+
+; these metadata can be empty
+; in a future version of the web application it will
+; be probably possible to create a project on redmine
+; if they are not filled
+homepage=
+tracker=
+repository=
+icon=icon.png
+
+; experimental flag
+experimental=False
+
+; deprecated flag (applies to the whole plugin and not only to the uploaded version)
+deprecated=False
