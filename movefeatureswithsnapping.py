@@ -53,8 +53,7 @@ class MoveFeaturesWithSnapping:
             return
 
         #Decide whether the plugin button/menu is enabled or disabled
-        if (layer.isEditable() and (layer.geometryType() == QGis.Line or
-                                    layer.geometryType() == QGis.Polygon)):
+        if layer.isEditable():
             self.move_features.setEnabled(True)
             try:  # remove any existing connection first
                 layer.editingStopped.disconnect(self.toggle)
@@ -67,18 +66,15 @@ class MoveFeaturesWithSnapping:
                 pass
         else:
             self.move_features.setEnabled(False)
-            if (layer.type() == QgsMapLayer.VectorLayer and
-                    (layer.geometryType() == QGis.Line or
-                     layer.geometryType() == QGis.Polygon)):
-                try:  # remove any existing connection first
-                    layer.editingStarted.disconnect(self.toggle)
-                except TypeError:  # missing connection
-                    pass
-                layer.editingStarted.connect(self.toggle)
-                try:
-                    layer.editingStopped.disconnect(self.toggle)
-                except TypeError:  # missing connection
-                    pass
+            try:  # remove any existing connection first
+                layer.editingStarted.disconnect(self.toggle)
+            except TypeError:  # missing connection
+                pass
+            layer.editingStarted.connect(self.toggle)
+            try:
+                layer.editingStopped.disconnect(self.toggle)
+            except TypeError:  # missing connection
+                pass
 
 
     def deactivate(self):
