@@ -14,7 +14,6 @@ class MoveFeaturesWithSnappingTool(QgsMapTool):
         self.rb = None
         self.count = 0
         self.featid = None
-        self.snapping = True
         #our own fancy cursor
         self.cursor = QCursor(QPixmap(["16 16 3 1",
                                        "      c None",
@@ -67,19 +66,22 @@ class MoveFeaturesWithSnappingTool(QgsMapTool):
         self.snapmarker.hide()
         x = event.pos().x()
         y = event.pos().y()
-        if self.snapping:
-            startingPoint = QPoint(x, y)
-            snapper = QgsMapCanvasSnapper(self.canvas)
-            (retval, result) = snapper.snapToCurrentLayer(startingPoint,QgsSnapper.SnapToVertex)
-            if result:
+
+        startingPoint = QPoint(x, y)
+        snapper = QgsMapCanvasSnapper(self.canvas)
+        (retval, result) = snapper.snapToCurrentLayer(startingPoint,QgsSnapper.SnapToVertex)
+        if result:
+            point = result[0].snappedVertex
+            self.snapmarker.setCenter(point)
+            self.snapmarker.show()
+            point = self.toLayerCoordinates(layer,point)
+        else:
+            (retval, result) = snapper.snapToBackgroundLayers(startingPoint)
+            if len(result) > 0:
                 point = result[0].snappedVertex
                 self.snapmarker.setCenter(point)
                 self.snapmarker.show()
-                point = self.toLayerCoordinates(layer,point)
-            else:
-                point = self.toLayerCoordinates(layer, event.pos())
-        else:
-            point = self.toLayerCoordinates(layer, event.pos())
+                point = self.toLayerCoordinates(layer, point)
 
         pnt = self.toMapCoordinates(layer, point)
         return pnt
